@@ -29,7 +29,6 @@ var process = function(result, kind) {
   if (window.loaded == 2) {
     var distro = suppress(hashArray, distributionArray);
     var output = $.csv.fromObjects(distro);
-    console.log(output)
     download('distribution.csv', output);
   }
 }
