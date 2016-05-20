@@ -1,4 +1,4 @@
-var start = function() {
+function startSuppression() {
   window.loaded = 0;
   if (window.File && window.FileReader && window.FileList && window.Blob) {
     var hashString = read(hash.files[0], 'hash');
@@ -7,7 +7,7 @@ var start = function() {
     alert('The File APIs are not fully supported in this browser.');
   }
 }
-var read = function(file, kind) {
+function read(file, kind) {
   var reader = new FileReader();
   reader.kind = kind
   reader.onload = (function(theFile) {
@@ -20,7 +20,7 @@ var read = function(file, kind) {
   })(file);
   reader.readAsText(file);
   }
-var process = function(result, kind) {
+function process(result, kind) {
   if (kind == 'hash') {
     window.hashArray = result.replace('"','').split(/\r?\n/);
   } else if (kind == 'distribution') {
@@ -30,9 +30,10 @@ var process = function(result, kind) {
     var distro = suppress(hashArray, distributionArray);
     var output = $.csv.fromObjects(distro);
     download('distribution.csv', output);
+    cleanUp();
   }
 }
-var md5Array = function(distributionArray) {
+function md5Array(distributionArray) {
   if (distributionArray[0].email) {
     for (var i = 0, row; row = distributionArray[i]; i++) {
       distributionArray[i].hash = md5(distributionArray[i].email)
@@ -42,14 +43,18 @@ var md5Array = function(distributionArray) {
     alert ("There is no 'email' column in the supplied distribution file.")
   }
 }
-var suppress = function(hashArray, distributionArray) {
+function suppress(hashArray, distributionArray) {
   var newDistribution = []
-  for (var i = 0, row; row=distributionArray[i]; i++) {
-    if (!(hashArray.includes(row.hash))) {
-      newDistribution.push(row)
+  if (hashArray.length > 0) {
+    for (var i = 0, row; row=distributionArray[i]; i++) {
+      if (!(hashArray.includes(row.hash))) {
+        newDistribution.push(row)
+      }
     }
+    return newDistribution
+  } else {
+    alert("Hash file did not successfully load")
   }
-  return newDistribution
 }
 function download(filename, text) {
   var element = document.createElement('a');
@@ -58,4 +63,8 @@ function download(filename, text) {
   var node = document.createTextNode('Download suppressed file')
   element.appendChild(node)
   document.body.appendChild(element);
+}
+function cleanUp() {
+  window.hashArray = []
+  window.distributionArray = []
 }
