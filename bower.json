@@ -1,0 +1,22 @@
+{
+  "name": "compare",
+  "main": "compare.js",
+  "version": "0.0.0",
+  "authors": [
+    "Michael Lambright <michael.g.lambright@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.2.3",
+    "jquery-csv": "~0.8.1",
+    "client-line-navigator": "anpur/client-line-navigator",
+    "js-crypto": "jbt/js-crypto"
+  }
+}
