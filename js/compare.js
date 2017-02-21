@@ -22,12 +22,12 @@ function read(file, kind) {
   }
 function process(result, kind) {
   if (kind == 'hash') {
-    window.hashArray = result.replace('"','').split(/\r?\n/);
+    window.hashArray = result.replace('"','').replace(' ','').split(/\r?\n/);
   } else if (kind == 'distribution') {
     window.distributionArray = md5Array($.csv.toObjects(result));
   }
   if (window.loaded == 2) {
-    var distro = suppress(hashArray, distributionArray);
+    var distro = suppress(hashArray, window.distributionArray);
     var output = $.csv.fromObjects(distro);
     download('distribution.csv', output);
     cleanUp();
