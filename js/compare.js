@@ -11,7 +11,6 @@ function read(file, kind) {
   var reader = new FileReader();
   reader.kind = kind
   reader.onload = (function(theFile) {
-
     return function(e) {
       window.loaded += 1;
       var fileString = reader.result;
@@ -35,14 +34,20 @@ function process(result, kind) {
 }
 function md5Array(distributionArray) {
   if (distributionArray[0].email) {
+    var email
     for (var i = 0, row; row = distributionArray[i]; i++) {
+      email = distributionArray[i].email
+      if (upper.checked) {
+        email = email.toUpperCase();
+      } else {
+        email = email.toLowerCase();
+      }
       distributionArray[i].hash = md5(distributionArray[i].email)
     }
     return distributionArray
   } else {
     alert ("There is no 'email' column in the supplied distribution file.")
   }
-}
 function suppress(hashArray, distributionArray) {
   var newDistribution = []
   if (hashArray.length > 0) {
