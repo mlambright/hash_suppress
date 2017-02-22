@@ -18,15 +18,15 @@ function read(file, kind) {
     }
   })(file);
   reader.readAsText(file);
-  }
+}
 function process(result, kind) {
   if (kind == 'hash') {
-    window.hashArray = result.replace('"','').replace(' ','').split(/\r?\n/);
+    window.hashArray = result.replace('"','').replace(/\r/g,'').split(/\r?\n/)
   } else if (kind == 'distribution') {
     window.distributionArray = md5Array($.csv.toObjects(result));
   }
   if (window.loaded == 2) {
-    var distro = suppress(hashArray, window.distributionArray);
+    var distro = suppress(hashArray, distributionArray);
     var output = $.csv.fromObjects(distro);
     download('distribution.csv', output);
     cleanUp();
@@ -36,18 +36,19 @@ function md5Array(distributionArray) {
   if (distributionArray[0].email) {
     var email
     for (var i = 0, row; row = distributionArray[i]; i++) {
-      email = distributionArray[i].email
+      email = row.email
       if (upper.checked) {
         email = email.toUpperCase();
       } else {
         email = email.toLowerCase();
       }
-      distributionArray[i].hash = md5(distributionArray[i].email)
+      distributionArray[i].hash = md5(email);
     }
     return distributionArray
   } else {
     alert ("There is no 'email' column in the supplied distribution file.")
   }
+}
 function suppress(hashArray, distributionArray) {
   var newDistribution = []
   if (hashArray.length > 0) {
